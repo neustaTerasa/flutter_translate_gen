@@ -14,7 +14,7 @@ dependencies:
   source_gen: '>=0.9.4 <=1.0.0'
   build: '>=1.2.1 <=2.0.0'
   code_builder: '>=3.2.0 <=4.0.0'
-  analyzer: '>=0.36.4 <=1.1.0'
+  analyzer: '>=0.32.0 <=1.1.0'
   glob: ^2.0.1
   # TODO point to 1.0.2 as soon as it is merged
   flutter_translate_annotations:
