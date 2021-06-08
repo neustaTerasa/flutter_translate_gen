@@ -10,10 +10,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # TODO point to 1.0.2 as soon as it is merged
+  # TODO point to upstream as soon as it is merged
   flutter_translate_annotations:
-    git: https://github.com/avbk/flutter_translate_annotations
-  flutter_translate: ^1.6.0
+    git:
+      url: https://github.com/avbk/flutter_translate_annotations
+      ref: nullsafe
+  flutter_translate: ^3.0.1
 
 dev_dependencies:
   flutter_test:
