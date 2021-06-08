@@ -16,9 +16,13 @@ class AssetsReader {
     final result = <String, Map<String, dynamic>>{};
     await for (final entity in assets) {
       if (entity.pathSegments.last.endsWith(".json")) {
-        final Map<String, dynamic> jsonMap = jsonDecode(
+        final Map<String, dynamic>? jsonMap = jsonDecode(
           await step.readAsString(entity),
         );
+
+        if (jsonMap == null) {
+          throw StateError("Could not parse JSON for '${entity.path}'");
+        }
 
         final lang = entity.pathSegments.last.replaceAll(".json", "");
         result[lang] = jsonMap;

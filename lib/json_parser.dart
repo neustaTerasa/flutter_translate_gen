@@ -8,7 +8,7 @@ class JsonParser {
   LocalizedItemBranch parse(
     Map<String, Map<String, dynamic>> files,
   ) {
-    final root = LocalizedItemBranch(null, null);
+    final root = LocalizedItemBranch.root();
 
     for (final file in files.entries) {
       final lang = file.key;

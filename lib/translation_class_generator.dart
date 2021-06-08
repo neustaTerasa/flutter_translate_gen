@@ -1,4 +1,4 @@
-﻿import 'package:code_builder/code_builder.dart';
+import 'package:code_builder/code_builder.dart';
 import 'package:dart_casing/dart_casing.dart';
 import 'package:flutter_translate_annotations/flutter_translate_annotations.dart';
 import 'package:flutter_translate_gen/json_parser.dart';
@@ -48,10 +48,10 @@ class TranslationClassGenerator {
   }
 
   Class _generateClass({
-    String name,
-    Iterable<LocalizedItemLeaf> leafs,
-    Iterable<LocalizedItemBranch> plurals,
-    Iterable<LocalizedItemBranch> branches,
+    /*required*/ required String name,
+    /*required*/ required Iterable<LocalizedItemLeaf> leafs,
+    /*required*/ required Iterable<LocalizedItemBranch> plurals,
+    /*required*/ required Iterable<LocalizedItemBranch> branches,
   }) =>
       Class(
         (cls) {
@@ -176,7 +176,6 @@ class TranslationClassGenerator {
         return Casing.lowerCase(name, separator: _options.separator);
       case CaseStyle.camelCase:
         return Casing.camelCase(name);
-        break;
       default:
         throw ArgumentError("${_options.caseStyle} is not a valid caseStyle");
     }
@@ -207,10 +206,10 @@ extension _Plurals on LocalizedItemBranch {
     final docs = <String>[];
     for (final lang in languages) {
       for (final plural in JsonParser.pluralsKeys) {
-        final leaf = this[plural] as LocalizedItemLeaf;
+        final leaf = this[plural] as LocalizedItemLeaf?;
         if (leaf != null) {
           docs.add(
-              "/// * $lang:$plural: ${leaf.translations[lang].replaceAll("\n", "\\n")}");
+              "/// * $lang:$plural: ${leaf.translations[lang]?.replaceAll("\n", "\\n")}");
         }
       }
     }

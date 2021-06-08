@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
@@ -31,7 +31,14 @@ class FlutterTranslateGen extends AnnotationGenerator<FlutterTranslate> {
       );
     }
 
-    final className = "_\$${Casing.titleCase(element.name, separator: "")}";
+    final name = element.name;
+    if (name == null) {
+      throw InvalidGenerationSourceError(
+        "Could not read the name of the annotated element",
+        element: element,
+      );
+    }
+    final className = "_\$${Casing.titleCase(name, separator: "")}";
     final options = _fromAnnotation(annotation);
     final files = await _getFiles(buildStep, options);
     final translations = const JsonParser().parse(files);
@@ -72,8 +79,14 @@ class FlutterTranslateGen extends AnnotationGenerator<FlutterTranslate> {
   }
 
   FlutterTranslate _fromAnnotation(ConstantReader annotation) {
+    final path = annotation.asString("path");
+
+    if (path == null) {
+      throw InvalidGenerationSourceError("The path argument is missing");
+    }
+
     return FlutterTranslate(
-        path: annotation.asString("path"),
+        path: path,
         missingTranslations: annotation.asEnum(
           "missingTranslations",
           ErrorLevel.values,
@@ -103,10 +116,10 @@ extension on Element {
 }
 
 extension on ConstantReader {
-  String asString(String key) => peek(key)?.stringValue;
+  String? asString(String key) => peek(key)?.stringValue;
 
   T asEnum<T>(String key, List<T> values) => enumFromString(
         values,
-        peek(key)?.revive()?.accessor,
+        peek(key)?.revive().accessor ?? "",
       );
 }

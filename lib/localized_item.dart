@@ -1,11 +1,14 @@
-﻿import 'package:code_builder/code_builder.dart';
+import 'package:code_builder/code_builder.dart';
 import 'package:dart_casing/dart_casing.dart';
 
 abstract class LocalizedItem {
-  final String path;
-  final String key;
+  final String? _path;
+  final String? _key;
 
-  LocalizedItem._(this.path, this.key);
+  LocalizedItem._(this._path, this._key);
+
+  String get path => _path ?? "";
+  String get key => _key ?? "";
 
   String get fullPath => path == null || path.isEmpty ? key : "$path.$key";
 
@@ -16,12 +19,17 @@ class LocalizedItemBranch extends LocalizedItem {
   final Map<String, LocalizedItem> _children;
   bool isPlural;
 
+  LocalizedItemBranch.root()
+      : _children = {},
+        isPlural = false,
+        super._(null, null);
+
   LocalizedItemBranch(String path, String key)
       : _children = {},
         isPlural = false,
         super._(path, key);
 
-  LocalizedItem operator [](String key) => _children[key];
+  LocalizedItem? operator [](String key) => _children[key];
 
   void operator []=(String key, LocalizedItem item) => _children[key] = item;
 
@@ -37,24 +45,26 @@ class LocalizedItemBranch extends LocalizedItem {
       .where((v) => v.isPlural);
 
   LocalizedItemLeaf ensureLeaf(String child) {
-    if (this[child] == null) {
+    final potentialItem = this[child];
+    if (potentialItem == null) {
       final newItem = LocalizedItemLeaf(_pathFor(key), child);
       this[child] = newItem;
       return newItem;
-    } else if (this[child] is LocalizedItemLeaf) {
-      return this[child] as LocalizedItemLeaf;
+    } else if (potentialItem is LocalizedItemLeaf) {
+      return potentialItem;
     } else {
       throw StateError("${_pathFor(child)} is not translated consistently");
     }
   }
 
   LocalizedItemBranch ensureBranch(String child) {
-    if (this[child] == null) {
+    final potentialItem = this[child];
+    if (potentialItem == null) {
       final newItem = LocalizedItemBranch(_pathFor(key), child);
       this[child] = newItem;
       return newItem;
-    } else if (this[child] is LocalizedItemBranch) {
-      return this[child] as LocalizedItemBranch;
+    } else if (potentialItem is LocalizedItemBranch) {
+      return potentialItem;
     } else {
       throw StateError("${_pathFor(child)} is not translated consistently");
     }
@@ -63,9 +73,7 @@ class LocalizedItemBranch extends LocalizedItem {
   String get className => "_\$${Casing.titleCase(fullPath, separator: "")}";
 
   String _pathFor(String key) {
-    if (path == null) {
-      return "";
-    } else if (path.isEmpty) {
+    if (path.isEmpty) {
       return key;
     } else {
       return "$path.$key";
@@ -89,11 +97,11 @@ class LocalizedItemLeaf extends LocalizedItem {
   }
 
   Set<String> argsForLang(String lang) {
-    return _argsForTranslation(translations[lang]);
+    return _argsForTranslation(translations[lang] ?? "");
   }
 
   Set<String> _argsForTranslation(String translation) => _argsRegex
       .allMatches(translation.replaceAll("{{value}}", "ignored"))
-      .map((e) => e.group(1))
+      .map((e) => e.group(1) ?? "")
       .toSet();
 }
