@@ -32,7 +32,7 @@ abstract class AnnotationGenerator<T> extends Generator {
       Element element, ConstantReader annotation, BuildStep buildStep);
 
   String _createOutput(Library generatedLibrary) {
-    final DartEmitter emitter = DartEmitter(Allocator());
+    final DartEmitter emitter = DartEmitter(allocator: Allocator());
     return DartFormatter().format(
       generatedLibrary.accept(emitter).toString(),
     );
