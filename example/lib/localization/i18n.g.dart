@@ -29,7 +29,7 @@ class _$I18n {
   /// * en: This is an example with {something}
   ///
   /// parsed from: params
-  String params({@required dynamic something}) =>
+  String params({required dynamic something}) =>
       translate('params', args: {"something": something});
 
   /// Translations:
@@ -102,7 +102,7 @@ class _$Language {
   /// * es: El idioma seleccionado actualmente es {language}
   ///
   /// parsed from: language.selected_message
-  String selectedMessage({@required dynamic language}) =>
+  String selectedMessage({required dynamic language}) =>
       translate('language.selected_message', args: {"language": language});
 }
 
@@ -176,7 +176,7 @@ class _$Plural {
   /// * en:else: I have {{value}} {things}.
   ///
   /// parsed from: plural.demo_with_args
-  String demoWithArgs(int value, {@required dynamic things}) =>
+  String demoWithArgs(int value, {required dynamic things}) =>
       translatePlural('plural.demo_with_args', value, args: {"things": things});
 }
 

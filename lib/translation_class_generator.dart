@@ -185,7 +185,6 @@ class TranslationClassGenerator {
 final Reference stringType = type("String");
 final Reference intType = type("int");
 final Reference dynamicType = type("dynamic");
-final Reference requiredAnnotation = type("required");
 
 Reference type(String type) => TypeReference((trb) => trb.symbol = type);
 
@@ -234,7 +233,7 @@ extension on Set<String> {
         (p) => p
           ..name = param
           ..type = dynamicType
-          ..annotations.add(requiredAnnotation)
+          ..required = true
           ..named = true,
       ));
 }
