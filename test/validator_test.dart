@@ -4,8 +4,8 @@ import 'package:flutter_translate_gen/validator.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Validator validator;
-  JsonParser parser;
+  late Validator validator;
+  late JsonParser parser;
 
   Result validate(
     Map<String, Map<String, dynamic>> testData, {
